@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Student Data{% endblock title %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Student Data</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if student_data %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in student_data %}
+                                        <tr>
+                                            <td>{{ student.name }}</td>
+                                            <td>{{ student.age }}</td>
+                                            <td>{{ student.phone }}</td>
+                                            <td>{{ student.email }}</td>
+                                            <td>
+                                            <button  name="edit_student_button" id="edit_student_button" value='{{student.id}}' onclick="EditStudentButton('{{student.id}}','{{ student.name }}','{{ student.age }}','{{ student.phone }}','{{ student.email }}')" class="btn btn-primary">Edit</button> 
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary">Delete</button> 
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No student data available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editStudent" tabindex="-1" aria-labelledby="editStudentLabel" aria-hidden="true">
+        <div class="modal-dialog xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editStudentLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'edit_student' %}">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2 class="text-center">Student Form</h2>
+                                    </div>
+                                    <input type="hidden" id="edit_student_id" name="edit_student_id">
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="edit_name" class="form-label">Name:</label>
+                                            <input type="text" class="form-control" id="edit_name" name="edit_name"  >
+                                        </div>
+                
+                                        <div class="mb-3">
+                                            <label for="edit_age" class="form-label">Age:</label>
+                                            <input type="text" class="form-control" id="edit_age" name="edit_age"  >
+                                        </div>
+                
+                                        <div class="mb-3">
+                                            <label for="edit_phone" class="form-label">Mobile Number:</label>
+                                            <input type="text" class="form-control" id="edit_phone" name="edit_phone" >
+                                        </div>
+                
+                                        <div class="mb-3">
+                                            <label for="edit_email" class="form-label">Email:</label>
+                                            <input type="email" class="form-control" id="edit_email" name="edit_email"  >
+                                        </div>
+                
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock body %}
+
+{% block script %}
+
+<script>
+
+    function EditStudentButton(id,name,age,phone,email) {
+        $('#edit_student_id').val(id);
+       
+        document.getElementById("edit_name").value = name;
+        document.getElementById("edit_age").value = age;
+        document.getElementById("edit_phone").value = phone;
+        document.getElementById("edit_email").value = email;
+        
+        $('#editStudent').modal('show');
+
+       
+        
+    }
+
+
+
+
+</script>
+{% endblock script %}
